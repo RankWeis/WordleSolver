@@ -23,6 +23,5 @@ class WordListGenerator {
         return word.fold(mapOf<Char, Int>()) { acc, x -> acc.plus(x to (acc[x]?.plus(1) ?: 1)) }
             .filter { it.value > 1 }
             .isEmpty()
-
     }
 }

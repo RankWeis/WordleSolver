@@ -9,7 +9,9 @@ class NextGuessHelper {
             .flatMap { it }
             .map { it.character }
 
-        val sortedHistogram = wordList.fold(mapOf<Char, Int>()) { acc, x -> addToHistogram(acc, x) }
+        val sortedHistogram = wordList
+            .filter { noRepeatLetters(it) }
+            .fold(mapOf<Char, Int>()) { acc, x -> addToHistogram(acc, x) }
             .filter { !omittedLetters.contains(it.key) }
             .toList()
             .sortedBy { (_, v) -> v }
@@ -34,4 +36,9 @@ class NextGuessHelper {
         return previousValue
     }
 
+    private fun noRepeatLetters(word: String): Boolean {
+        return word.fold(mapOf<Char, Int>()) { acc, x -> acc.plus(x to (acc[x]?.plus(1) ?: 1)) }
+            .filter { it.value > 1 }
+            .isEmpty()
+    }
 }
