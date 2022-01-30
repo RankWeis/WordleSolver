@@ -29,7 +29,7 @@ class NextGuessHelper {
         var previousValue = wordList
         histogram.map { w ->
             val updatedWords = previousValue.filter { it.contains(w) }
-            if(updatedWords.size > 1) {
+            if(updatedWords.isNotEmpty()) {
                 previousValue = updatedWords
             }
         }

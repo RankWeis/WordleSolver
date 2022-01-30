@@ -7,12 +7,12 @@ class Solver {
         history.history
             .map { it.letters}
             .flatMap { it }
-            .map { mutableWordList = solveAll(it, mutableWordList) }
+            .map { mutableWordList = solveAll(history, it, mutableWordList) }
         return mutableWordList
     }
     
-    fun solveAll(letterGuess: LetterGuess, wordList: List<String>) : List<String> {
-        return solveNoMatch(letterGuess, solvePartial(letterGuess, solveExact(letterGuess, wordList)))
+    fun solveAll(history: WordHistory, letterGuess: LetterGuess, wordList: List<String>) : List<String> {
+        return solveNoMatch(history, letterGuess, solvePartial(letterGuess, solveExact(letterGuess, wordList)))
     }
     
     fun solveExact(letterGuess : LetterGuess, wordList: List<String>): List<String> {
@@ -27,8 +27,15 @@ class Solver {
             .filter { it.contains(letterGuess.character) }
     }
 
-    fun solveNoMatch(letterGuess: LetterGuess, wordList: List<String>) : List<String> {
+    fun solveNoMatch(history: WordHistory, letterGuess: LetterGuess, wordList: List<String>) : List<String> {
         if(letterGuess.result != LetterResult.NoMatch) return wordList
+        val exactMatches = history.history
+            .map { it.letters }
+            .flatMap { it }
+            .filter { it.result == LetterResult.ExactMatch || it.result == LetterResult.PartialMatch }
+        if ( exactMatches.map { it.character }.contains(letterGuess.character)) {
+            return solvePartial(letterGuess, wordList)
+        }
         return wordList.filter { !it.contains(letterGuess.character) }
     }
 }
