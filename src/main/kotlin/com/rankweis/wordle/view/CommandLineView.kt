@@ -26,9 +26,12 @@ class CommandLineView {
     fun play(wordList : List<String>) {
         val solver = Solver()
         var history = WordHistory(listOf())
+        val helper = NextGuessHelper()
         while(true) {
             history = WordHistory(history.history + ask())
-            println(solver.solve(history, wordList))
+            var updatedWords = solver.solve(history, wordList)
+            println(updatedWords)
+            println(helper.bestNextGuess(history, updatedWords))
         }
     }
 }
