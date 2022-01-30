@@ -4,7 +4,7 @@ class WordListGenerator {
     val fileName = "words/words_alpha.txt"
     
     fun getWordList(): List<String> {
-        return getNoRepeatLetters(getFiveLetterWords(getWordsFromResources()))
+        return getFiveLetterWords(getWordsFromResources())
     }
     
     private fun getWordsFromResources(): List<String> {
